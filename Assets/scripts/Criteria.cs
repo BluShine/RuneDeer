@@ -31,12 +31,6 @@ public class Criteria : MonoBehaviour
                 case CritType.color:
                     r = photos[i].info.detectColor(color);
                     break;
-                case CritType.density:
-                    r = photos[i].info.pipeDensity();
-                    break;
-                case CritType.count:
-                    r = (float)photos[i].info.countPipes() / amount;
-                    break;
                 case CritType.saturation:
                     r = photos[i].info.averageSaturation();
                     break;

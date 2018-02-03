@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 public class PhotoInfo
 {
-    public PipeInfo[] pipeDetection;
-
     public Texture2D texture;
 
     static int SEARCHRES = 10;
@@ -12,34 +10,9 @@ public class PhotoInfo
     static float SDIST = .5f;
     static float VDIST = .5f;
 
-    public PhotoInfo (int rays)
+    public PhotoInfo(int rays)
     {
-        pipeDetection = new PipeInfo[rays];
-    }
-
-    public int countPipes()
-    {
-        HashSet<int> pipesSpotted = new HashSet<int>();
-        for (int i = 0; i < pipeDetection.Length; i++) {
-            if (pipeDetection[i] != null && !pipesSpotted.Contains(pipeDetection[i].pipeID))
-            {
-                pipesSpotted.Add(pipeDetection[i].pipeID);
-            }
-        }
-        return pipesSpotted.Count;
-    }
-
-    public float pipeDensity()
-    {
-        int pCount = 0;
-        for (int i = 0; i < pipeDetection.Length; i++)
-        {
-            if (pipeDetection[i] != null)
-            {
-                pCount++;
-            }
-        }
-        return (float)pCount / (float)pipeDetection.Length;
+        //pipeDetection = new PipeInfo[rays];
     }
 
     //returns 0 to 1 based on how much of the photo is close to that color

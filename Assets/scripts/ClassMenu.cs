@@ -30,7 +30,6 @@ public class ClassMenu : MonoBehaviour
 
     float eyesTimer = 0;
     bool eyesClosing = false;
-    Bed dreamBed;
 
     public GameObject eyes;
 
@@ -47,7 +46,7 @@ public class ClassMenu : MonoBehaviour
             eyesTimer += Time.deltaTime;
             if(eyesTimer >= 2)
             {
-                dreamBed.Dream();
+                //next scene
             }
             return;
         }
@@ -59,11 +58,6 @@ public class ClassMenu : MonoBehaviour
             Debug.DrawLine(rayHit.point, transform.position);
             Photograph photo = rayHit.collider.gameObject.GetComponent<Photograph>();
             Grader grader = rayHit.collider.gameObject.GetComponentInParent<Grader>();
-            Bed bed = rayHit.collider.gameObject.GetComponent<Bed>();
-            if(bed == null)
-            {
-                bed = rayHit.collider.gameObject.GetComponentInParent<Bed>();
-            }
             if (photo != null)
             {
                 mouseOver = true;
@@ -90,14 +84,7 @@ public class ClassMenu : MonoBehaviour
                     grader.Click();
                 }
                 grader.talk();
-            } else if (bed != null && Input.GetButtonDown("Fire1"))
-            {
-                dreamBed = bed;
-                eyesClosing = true;
-                eyes.gameObject.SetActive(true);
-                eyes.GetComponent<Animator>().SetTrigger("close");
-                //bed.Dream();
-            }
+            } 
             else if(grabbedPhoto != null && Input.GetButtonDown("Fire1"))
             {
                 grabbedPhoto.transform.position = rayHit.point + rayHit.normal * .05f;

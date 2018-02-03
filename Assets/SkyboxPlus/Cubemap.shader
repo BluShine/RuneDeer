@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "SkyboxPlus/Cubemap"
 {
     Properties
@@ -47,7 +49,7 @@ Shader "SkyboxPlus/Cubemap"
         v2f o;
         float3x3 m = float3x3(_Rotation1.xyz, _Rotation2.xyz, _Rotation3.xyz);
         float4 vp = float4(mul(m, v.vertex.xyz), v.vertex.w);
-        o.vertex = mul(UNITY_MATRIX_MVP, vp);
+        o.vertex = UnityObjectToClipPos(vp);
         o.texcoord = v.vertex.xyz;
         return o;
     }

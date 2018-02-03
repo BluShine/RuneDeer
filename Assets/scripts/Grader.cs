@@ -26,9 +26,6 @@ public class Grader : MonoBehaviour
 
     bool graded = false;
 
-    [HideInInspector]
-    public List<Bed> beds = new List<Bed>();
-
     public void Start()
     {
         gradeText = GameObject.Find("Grade Text").GetComponent<TextMesh>();
@@ -78,11 +75,6 @@ public class Grader : MonoBehaviour
             finalGrade += "Overall- " + (Mathf.Floor(avgGrade * 1000) / 10);
             gradeText.text = finalGrade;
             graded = true;
-            //raise the beds
-            foreach (Bed b in beds)
-            {
-                b.gameObject.SetActive(true);
-            }
             //hint about the next grader
             GameObject.Find("Next Text").GetComponent<MeshRenderer>().enabled = true;
         }

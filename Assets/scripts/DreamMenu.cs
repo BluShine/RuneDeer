@@ -36,7 +36,7 @@ public class DreamMenu : MonoBehaviour
         {
             //set fog gradient
             GlobalFog f = FindObjectOfType<GlobalFog>();
-            f.fogGradient = weather.transform.FindChild("FogGradient").GetComponent<GradientToTexture>();
+            f.fogGradient = weather.transform.Find("FogGradient").GetComponent<GradientToTexture>();
             f.applyGradient();
             //set skybox
             RenderSettings.skybox = weather.skybox;
