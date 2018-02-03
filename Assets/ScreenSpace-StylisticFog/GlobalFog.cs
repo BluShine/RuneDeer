@@ -29,9 +29,16 @@ namespace UnityStandardAssets.ImageEffects
         public GradientToTexture fogGradient;
 		public Texture2D _fogColorTexture = null;
 
+        bool lateStart = false;
+
         public void Start()
         {
-            applyGradient();
+            //applyGradient();
+        }
+
+        public void Update()
+        {
+
         }
 
         public void applyGradient()
