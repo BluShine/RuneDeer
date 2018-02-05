@@ -12,7 +12,7 @@ public class IKCCD: IK
     public float[] Weights = new float[0];
     public Quaternion StartOffset = Quaternion.identity;
 
-    [ExecuteInEditMode]
+    //[ExecuteInEditMode]
     private void Update()
     {
         /*var r = Quaternion.Euler(45, 0, 0);
