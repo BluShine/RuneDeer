@@ -44,7 +44,7 @@ public class Bone : MonoBehaviour
         lastRotation = transform.localRotation;
     }
 
-    [ExecuteInEditMode]
+    //[ExecuteInEditMode]
     // Update is called once per frame
     void Update()
     {
