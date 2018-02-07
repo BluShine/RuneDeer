@@ -12,6 +12,8 @@ public class IKCCD: IK
     public float[] Weights = new float[0];
     public Quaternion StartOffset = Quaternion.identity;
 
+    float smoothing = .25f;
+
     //[ExecuteInEditMode]
     private void Update()
     {
@@ -29,11 +31,10 @@ public class IKCCD: IK
         for (var i = 0; i < this.Bones.Length; i++)
         {
             if (i == 0)
-                Bones[i].transform.rotation = rotations[i];
+                Bones[i].transform.rotation = Quaternion.Lerp(Bones[i].transform.rotation, rotations[i], smoothing);
             else
-                Bones[i].transform.localRotation = rotations[i];
-            Bones[i].ApplyAngularLimit();
-            //Bones[i].ApplyAngularLimit();
+                Bones[i].transform.localRotation = Quaternion.Lerp(Bones[i].transform.localRotation, rotations[i], smoothing);
+            //Bones[i].ApplyAngularLimit(); //not needed
         }
 
     }

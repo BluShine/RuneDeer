@@ -11,10 +11,14 @@ public class LegAnimator : MonoBehaviour {
     public float minDistance = .5f;
     public LayerMask raycastMask;
     public Vector3 neutralPosition = Vector3.zero;
+    Quaternion hoofDefault;
+    Quaternion hoofDown;
 
 	// Use this for initialization
 	void Start () {
         ikObject = ikTarget.GetComponent<IK>();
+        hoofDefault = hoof.localRotation;
+        hoofDown = hoof.rotation;
 	}
 	
 	// Update is called once per frame
@@ -24,10 +28,12 @@ public class LegAnimator : MonoBehaviour {
         if (Physics.Raycast(ray, out hit, rayDistance, raycastMask) && hit.distance >= minDistance)
         {
             ikTarget.position = hit.point;
+            hoof.localRotation = Quaternion.Inverse(hoofDefault) * Quaternion.LookRotation(transform.forward, hit.normal);
         }
         else
         {
             ikTarget.position = transform.TransformPoint(neutralPosition);
+            hoof.localRotation = hoofDefault;
         }
 	}
 
