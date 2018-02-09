@@ -7,11 +7,19 @@ public class StandingForce : MonoBehaviour {
     Rigidbody body;
 
     public Vector3 direction = Vector3.down;
-    public float maxForce = 10;
-    public float maxDist=2;
-    public float minDist=1;
     public LayerMask mask;
     public Vector3 offset = Vector3.zero;
+
+    public float maxDist = 10;
+    public float targetDist = 5;
+
+    public float maxForce = 10;
+    public float kP = .2f;
+    public float kI = .05f;
+    public float kD = .1f;
+
+    float lastError = 0;
+    float integral = 0;
 
     private void Awake()
     {
@@ -39,15 +47,20 @@ public class StandingForce : MonoBehaviour {
         RaycastHit hit = new RaycastHit();
         if (Physics.Raycast(ray, out hit, maxDist, mask))
         {
-            Debug.Log("hit");
-            float compression = Mathf.Min(1, 1 - (hit.distance - minDist) / (maxDist - minDist));
-            body.AddForce(compression * maxForce * -transform.TransformVector(direction));
+            float error = hit.distance - targetDist;
+            float deriv = (error - lastError) / Time.fixedDeltaTime;
+            integral += error * Time.fixedDeltaTime;
+            lastError = error;
+            float force = kP * error + kI * integral + kD * deriv;
+            force = Mathf.Clamp(force, -1, 0);
+            body.AddForce(-force * maxForce * Vector3.up);
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position + transform.TransformDirection(offset) + transform.TransformDirection(direction) * minDist, transform.position + transform.TransformDirection(offset) + transform.TransformDirection(direction) * maxDist);
+        Gizmos.DrawLine(transform.position + transform.TransformDirection(offset) + transform.TransformDirection(direction) * targetDist, 
+            transform.position + transform.TransformDirection(offset) + transform.TransformDirection(direction) * maxDist);
     }
 }
