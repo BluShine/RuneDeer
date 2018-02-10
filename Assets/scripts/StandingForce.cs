@@ -17,6 +17,7 @@ public class StandingForce : MonoBehaviour {
     public float kP = .2f;
     public float kI = .05f;
     public float kD = .1f;
+    public float iBound = 1;
 
     float lastError = 0;
     float integral = 0;
@@ -50,6 +51,7 @@ public class StandingForce : MonoBehaviour {
             float error = hit.distance - targetDist;
             float deriv = (error - lastError) / Time.fixedDeltaTime;
             integral += error * Time.fixedDeltaTime;
+            integral = Mathf.Clamp(integral, -iBound, iBound);
             lastError = error;
             float force = kP * error + kI * integral + kD * deriv;
             force = Mathf.Clamp(force, -1, 0);

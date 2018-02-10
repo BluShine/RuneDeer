@@ -7,6 +7,7 @@ public class MoveBodyToTarget : MonoBehaviour {
     public Rigidbody body;
     public float maxForce = 100;
     public Vector3 targetPos;
+    public Transform target;
 
     public float kP = .2f;
     public float kI = .05f;
@@ -24,7 +25,7 @@ public class MoveBodyToTarget : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        Vector3 errorVector = transform.TransformPoint(targetPos) - body.position;
+        Vector3 errorVector = target.position - body.position;
         errorVector = transform.InverseTransformVector(errorVector); //translate to local space for better behavior along each axis
         Vector3 deriv = (errorVector - lastError) / Time.fixedDeltaTime;
         integral += errorVector * Time.fixedDeltaTime;
@@ -43,7 +44,8 @@ public class MoveBodyToTarget : MonoBehaviour {
 
     private void OnDrawGizmosSelected()
     {
+        if (target == null) return;
         Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.TransformPoint(targetPos), .1f);
+        Gizmos.DrawSphere(target.position, .1f);
     }
 }
