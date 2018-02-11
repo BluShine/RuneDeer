@@ -8,6 +8,7 @@ public class DreamMenu : MonoBehaviour
     PhotoStorage storage;
 
     public Text hintText;
+    public RawImage filmImage;
 
     [HideInInspector]
     public float textFade = 0;
@@ -29,6 +30,10 @@ public class DreamMenu : MonoBehaviour
 
     public GameObject eyes;
 
+    public float filmCooldown = 5;
+    float filmTimer = 0;
+    public float rotationSpeed = 360;
+
     public void Start()
     {
         Weather weather = FindObjectOfType<Weather>();
@@ -49,6 +54,19 @@ public class DreamMenu : MonoBehaviour
 
     public void Update()
     {
+        filmTimer -= Time.deltaTime;
+        filmTimer = Mathf.Max(0, filmTimer);
+        if (filmTimer > 0)
+        {
+            filmImage.enabled = true;
+            filmImage.transform.rotation = Quaternion.Euler(filmImage.transform.rotation.eulerAngles + 
+                new Vector3(0, 0, Time.deltaTime * rotationSpeed));
+        }
+        else
+        {
+            filmImage.enabled = false;
+        }
+
         if(eyesClosing)
         {
             eyesTimer += Time.deltaTime;
@@ -127,5 +145,15 @@ public class DreamMenu : MonoBehaviour
         {
             hintText.enabled = false;
         }
+    }
+
+    public bool photoReady()
+    {
+        return filmTimer == 0;
+    }
+
+    public void clickPhoto()
+    {
+        filmTimer = filmCooldown;
     }
 }

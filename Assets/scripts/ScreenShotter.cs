@@ -27,6 +27,8 @@ public class ScreenShotter : MonoBehaviour
     public GameObject shutterAnim;
     public AudioSource shutterSound;
 
+    public AudioSource filmSound;
+
     public void Start()
     {
         dMenu = FindObjectOfType<DreamMenu>();
@@ -55,15 +57,18 @@ public class ScreenShotter : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && dMenu.photoReady())
         {
             //disable text
             dMenu.hintText.enabled = false;
+            dMenu.clickPhoto();
+            dMenu.filmImage.enabled = false;
             dMenu.textFade = 0;
             dMenu.hintTimer = 0;
 
             //play sound
             shutterSound.Play();
+            filmSound.PlayDelayed(1);
 
             //save image
             StartCoroutine(ScreenshotEncode());
