@@ -33,6 +33,8 @@ public class ScreenShotter : MonoBehaviour
     public Shader evaluationShader;
     RenderTexture evaluationRender;
 
+    CameraDamage cDamage;
+
     [BitStrap.Button]
     public void setShader()
     {
@@ -49,6 +51,7 @@ public class ScreenShotter : MonoBehaviour
 
     public void Start()
     {
+        cDamage = FindObjectOfType<CameraDamage>();
         dMenu = FindObjectOfType<DreamMenu>();
         width = Screen.width;
         height = Screen.height;
@@ -78,14 +81,12 @@ public class ScreenShotter : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Input.GetButtonDown("Fire1") && dMenu.photoReady())
+        if (Input.GetButtonDown("Fire1") && dMenu.photoReady() && storage.photos.Count < dMenu.filmShots)
         {
             //disable text
             dMenu.hintText.enabled = false;
             dMenu.clickPhoto();
             dMenu.filmImage.enabled = false;
-            dMenu.textFade = 0;
-            dMenu.hintTimer = 0;
 
             //play sound
             shutterSound.Play();
@@ -117,6 +118,8 @@ public class ScreenShotter : MonoBehaviour
                     } 
                 }
             }
+            photoInfo.damage = cDamage.damage;
+
             storage.infos.Add(photoInfo);
             //Debug.Log("pipes: " + photoInfo.countPipes() + "" + " density: " + photoInfo.pipeDensity());
         }

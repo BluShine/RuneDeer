@@ -37,6 +37,10 @@ public class ClassMenu : MonoBehaviour
     {
         instance = this;
         photosToGrade = new List<Photograph>();
+        if(FindObjectOfType<PhotoStorage>().photos.Count < 3)
+        {
+            tutorialText.GetComponent<TextMesh>().text = "Not enough photos.\nTry again.";
+        }
     }
 
     void Update()

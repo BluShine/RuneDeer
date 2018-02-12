@@ -5,7 +5,8 @@ public class PhotoInfo
 {
     public Texture2D texture;
     public Texture2D dataTexture;
-    public Texture2D motionTexture;
+
+    public float damage = 0;
 
     static int SEARCHRES = 10;
     static float HDIST = .125f;

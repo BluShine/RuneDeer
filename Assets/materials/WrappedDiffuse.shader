@@ -1,5 +1,6 @@
 ﻿Shader "Pipes/WrappedDiffuse" {
 	Properties{
+		_Color("Color", Color) = (1,1,1,1)
 		_Bias("Bias", Range(1.0, 0)) = .5
 		_Scale("Scale", Range(.5, 0)) = .5
 		_Exponent("Exponent", Range(5, .1)) = 2
@@ -17,6 +18,7 @@
 		CGPROGRAM
 		#pragma surface surf WrapLambert
 
+		half4 _Color;
 		half _Bias;
 		half _Scale;
 		half _Exponent;
@@ -42,7 +44,7 @@
 			half rim = 1 - saturate(dot(normalize(viewDir), s.Normal));
 
 			fixed4 c;
-			c.rgb = s.Albedo * gi.light.color * diff + gi.light.color * _SpecColor.rgb * spec + _RimColor.rgb * pow(rim, _RimPower);
+			c.rgb = _Color * s.Albedo * gi.light.color * diff + gi.light.color * _SpecColor.rgb * spec + _RimColor.rgb * pow(rim, _RimPower);
 			c.a = s.Alpha;
 
 			return c;

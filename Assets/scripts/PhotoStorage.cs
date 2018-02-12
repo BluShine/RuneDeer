@@ -5,7 +5,6 @@ public class PhotoStorage : MonoBehaviour
 {
     public List<Texture2D> photos;
     public List<Texture2D> photoMasks;
-    public List<Texture2D> photoMotion;
 
     public List<PhotoInfo> infos;
 

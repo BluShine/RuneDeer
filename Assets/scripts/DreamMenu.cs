@@ -9,10 +9,7 @@ public class DreamMenu : MonoBehaviour
 
     public Text hintText;
     public RawImage filmImage;
-
-    [HideInInspector]
-    public float textFade = 0;
-    static float TTIMER = 5;
+    public Text filmText;
 
     [HideInInspector]
     public float hintTimer = 0;
@@ -33,6 +30,7 @@ public class DreamMenu : MonoBehaviour
     public float filmCooldown = 5;
     float filmTimer = 0;
     public float rotationSpeed = 360;
+    public int filmShots = 5;
 
     public void Start()
     {
@@ -61,10 +59,13 @@ public class DreamMenu : MonoBehaviour
             filmImage.enabled = true;
             filmImage.transform.rotation = Quaternion.Euler(filmImage.transform.rotation.eulerAngles + 
                 new Vector3(0, 0, Time.deltaTime * rotationSpeed));
+            filmText.enabled = true;
+            filmText.text = storage.photos.Count + " / " + filmShots;
         }
         else
         {
             filmImage.enabled = false;
+            filmText.enabled = false;
         }
 
         if(eyesClosing)
@@ -83,23 +84,17 @@ public class DreamMenu : MonoBehaviour
         }
         if(Input.GetButtonDown("Submit"))
         {
-            if (storage.photos.Count >= 3)
+            if (storage.photos.Count >= filmShots)
             {
-                eyesClosing = true;
-                eyes.SetActive(true);
-                eyes.GetComponent<Animator>().SetTrigger("close");
-            } else {
-                hintTimer = 0;
-                textFade = TTIMER;
-                hintText.text = "Shoot at least 3 photos.";
-                hintText.color = Color.white;
+                closeEyes();
             }
-        } else if (hintTimer > HINTWAIT && storage.photos.Count >= 3)
+        } else if (storage.photos.Count == filmShots)
         {
-            hintTimer = 0;
-            textFade = TTIMER;
-            hintText.text = "[ENTER] to grade photos.";
-            hintText.color = Color.white;
+            hintText.color = new Color(.27f, .27f, .27f);
+            hintText.enabled = true;
+        } else
+        {
+            hintText.enabled = false;
         }
 
         if(Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Hover") != 0 || Input.GetButtonDown("Fire1"))
@@ -132,18 +127,15 @@ public class DreamMenu : MonoBehaviour
                 }
             }
         }
+    }
 
-        if(textFade > 0)
+    public void closeEyes()
+    {
+        if (!eyesClosing)
         {
-            hintText.enabled = true;
-            if(textFade < 1)
-            {
-                hintText.color = new Color(1, 1, 1, textFade);
-            }
-            textFade -= Time.deltaTime;
-        } else
-        {
-            hintText.enabled = false;
+            eyesClosing = true;
+            eyes.SetActive(true);
+            eyes.GetComponent<Animator>().SetTrigger("close");
         }
     }
 

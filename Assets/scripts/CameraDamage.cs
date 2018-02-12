@@ -6,8 +6,9 @@ using UnityEngine.Rendering.PostProcessing;
 public class CameraDamage : MonoBehaviour {
 
     public float damageMultiplier = 10;
-    public float damage = 0;
+    public int damage = 0;
     public float damageCooldown = 5;
+    public int maxDamage = 5;
     float cooldownTimer = 0;
     public float knockbackForce = 100;
     public float upKnockbackForce = 20;
@@ -30,7 +31,7 @@ public class CameraDamage : MonoBehaviour {
         bloomEffect = ScriptableObject.CreateInstance<Bloom>();
         //bloomEffect.dirtTexture.Override(dirtTexture);
         bloomEffect.enabled.Override(true);
-        bloomEffect.dirtIntensity.Override(damage);
+        bloomEffect.dirtIntensity.Override(0);
 
         volume = PostProcessManager.instance.QuickVolume(gameObject.layer, 100f, bloomEffect);
     }
@@ -49,6 +50,11 @@ public class CameraDamage : MonoBehaviour {
                 Vector3 fDir = transform.position - damagePos;
                 fDir = new Vector3(fDir.x, 0, fDir.z).normalized;
                 body.AddForce(fDir * knockbackForce + Vector3.up * upKnockbackForce, ForceMode.Impulse);
+                if(damage >= maxDamage)
+                {
+                    DreamMenu menu = FindObjectOfType<DreamMenu>();
+                    menu.closeEyes();
+                }
             }
         }
         bloomEffect.dirtIntensity.value = damage * damageMultiplier;
