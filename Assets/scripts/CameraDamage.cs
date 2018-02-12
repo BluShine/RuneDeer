@@ -10,6 +10,7 @@ public class CameraDamage : MonoBehaviour {
     public float damageCooldown = 5;
     float cooldownTimer = 0;
     public float knockbackForce = 100;
+    public float upKnockbackForce = 20;
 
     public Texture2D dirtTexture;
 
@@ -21,6 +22,8 @@ public class CameraDamage : MonoBehaviour {
 
     bool damaging = false;
     Vector3 damagePos = Vector3.zero;
+
+    bool onGround = false;
 
     void Start()
     {
@@ -43,7 +46,9 @@ public class CameraDamage : MonoBehaviour {
                 damage++;
                 cooldownTimer = damageCooldown;
                 particles.Play();
-                body.AddForce(((transform.position - damagePos).normalized + Vector3.up).normalized * knockbackForce, ForceMode.Impulse);
+                Vector3 fDir = transform.position - damagePos;
+                fDir = new Vector3(fDir.x, 0, fDir.z).normalized;
+                body.AddForce(fDir * knockbackForce + Vector3.up * upKnockbackForce, ForceMode.Impulse);
             }
         }
         bloomEffect.dirtIntensity.value = damage * damageMultiplier;

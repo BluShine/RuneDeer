@@ -8,6 +8,7 @@
 		_RimPower("Rim Light", Range(0, 10)) = 3
 		_RimColor("Rim Color", Color) = (1, 1, 1, 1)
 		_ColorRamp("Color Ramp", 2D) = "gray" {}
+		_EvaluationColor ("Evaluation Color", Color) = (1,1,0,1)
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }

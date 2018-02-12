@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class PhotoInfo
 {
     public Texture2D texture;
+    public Texture2D dataTexture;
+    public Texture2D motionTexture;
 
     static int SEARCHRES = 10;
     static float HDIST = .125f;

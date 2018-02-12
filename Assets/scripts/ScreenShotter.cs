@@ -29,6 +29,24 @@ public class ScreenShotter : MonoBehaviour
 
     public AudioSource filmSound;
 
+    public Camera evaluatorCamera;
+    public Shader evaluationShader;
+    RenderTexture evaluationRender;
+
+    [BitStrap.Button]
+    public void setShader()
+    {
+        if (evaluatorCamera != null && evaluationShader != null)
+        {
+            evaluatorCamera.SetReplacementShader(evaluationShader, "RenderType");
+        }
+    }
+    [ExecuteInEditMode]
+    private void Awake()
+    {
+        setShader();
+    }
+
     public void Start()
     {
         dMenu = FindObjectOfType<DreamMenu>();
@@ -52,7 +70,10 @@ public class ScreenShotter : MonoBehaviour
         //calculate horizontal fov
         float radHFov = 2 * Mathf.Atan(Mathf.Tan((vertFov * Mathf.Deg2Rad) / 2) * aspectRatio);
         horizFov = Mathf.Rad2Deg * radHFov;
-        Debug.Log("Vert " + vertFov + " Horiz " + horizFov);
+        //Debug.Log("Vert " + vertFov + " Horiz " + horizFov);
+        //setup evaluator camera
+        setShader();
+        evaluationRender = evaluatorCamera.targetTexture;
     }
 
     void LateUpdate()
@@ -118,16 +139,24 @@ public class ScreenShotter : MonoBehaviour
 
         texture.ReadPixels(new Rect(offsetX, offsetY, width, height), 0, 0);
         texture.Apply();
+        storage.photos.Add(texture);
+
+        //data texture
+        Texture2D dataTex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
+        //evaluatorCamera.Render();
+        RenderTexture.active = evaluationRender;
+        evaluatorCamera.Render();
+        dataTex.ReadPixels(new Rect(0, 0, 256, 256), 0, 0);
+        dataTex.Apply();
+        storage.photoMasks.Add(dataTex);
 
         // split the process up--ReadPixels() and the GetPixels()
         // call inside of the encoder are both pretty heavy
         yield return 0;
 
-        storage.photos.Add(texture);
-
         byte[] bytes = texture.EncodeToPNG();
 
-        // save to HD
+        // save to HDD
         string timestamp = System.DateTime.Now.Month + "-" + System.DateTime.Now.Day + "_" + 
             System.DateTime.Now.Hour + "-" + System.DateTime.Now.Minute + "-" + System.DateTime.Now.Second;
         File.WriteAllBytes(Application.dataPath + "/../screenshots/photo-" + timestamp + ".png", bytes);
