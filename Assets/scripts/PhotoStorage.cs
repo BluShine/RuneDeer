@@ -26,6 +26,7 @@ public class PhotoStorage : MonoBehaviour
         for (int i = 0; i < infos.Count; i++)
         {
             infos[i].texture = photos[i];
+            infos[i].dataTexture = photoMasks[i];
         }
     }
 

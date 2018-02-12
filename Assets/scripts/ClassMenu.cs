@@ -33,18 +33,30 @@ public class ClassMenu : MonoBehaviour
 
     public GameObject eyes;
 
+    public TextMesh scoreText;
+
+    bool lateStart = false;
+
+    bool gradedPhotos = false;
+    public ParticleSystem gradeParticles;
+
     void Start()
     {
         instance = this;
         photosToGrade = new List<Photograph>();
-        if(FindObjectOfType<PhotoStorage>().photos.Count < 3)
-        {
-            tutorialText.GetComponent<TextMesh>().text = "Not enough photos.\nTry again.";
-        }
+        
     }
 
     void Update()
     {
+        if(!lateStart)
+        {
+            if (FindObjectOfType<PhotoSpawner>().photoList.Count < 3)
+            {
+                tutorialText.GetComponent<TextMesh>().text = "Not enough photos.\nTry again.";
+            }
+            lateStart = true;
+        }
         if(eyesClosing)
         {
             eyesTimer += Time.deltaTime;
@@ -61,7 +73,6 @@ public class ClassMenu : MonoBehaviour
         {
             Debug.DrawLine(rayHit.point, transform.position);
             Photograph photo = rayHit.collider.gameObject.GetComponent<Photograph>();
-            Grader grader = rayHit.collider.gameObject.GetComponentInParent<Grader>();
             if (photo != null)
             {
                 mouseOver = true;
@@ -81,14 +92,7 @@ public class ClassMenu : MonoBehaviour
                     grabSound.Play();
                 }
                 photosToGrade.Remove(grabbedPhoto);
-            } else if (grader != null)
-            {
-                if(Input.GetButtonDown("Fire1"))
-                {
-                    grader.Click();
-                }
-                grader.talk();
-            } 
+            }  
             else if(grabbedPhoto != null && Input.GetButtonDown("Fire1"))
             {
                 grabbedPhoto.transform.position = rayHit.point + rayHit.normal * .05f;
@@ -100,6 +104,10 @@ public class ClassMenu : MonoBehaviour
                     if (rayHit.transform.name == "Grading Wall")
                     {
                         photosToGrade.Add(grabbedPhoto);
+                        if(photosToGrade.Count == 3 && !gradedPhotos)
+                        {
+                            gradePhotos();
+                        }
                     }
                 } else
                 {
@@ -159,5 +167,32 @@ public class ClassMenu : MonoBehaviour
         GUI.DrawTexture(new Rect((Screen.width - width) / 2,
             (Screen.height - height) / 2,
             width, height), crosshairTexture);
+    }
+
+    static Color32 DEERMASK = new Color32(255, 0, 255, 255);
+    static Color32 EYEMASK = new Color32(255, 0, 0, 255);
+    static Color32 EFFECTMASK = new Color32(0, 255, 0, 255);
+
+    void gradePhotos()
+    {
+        gradeParticles.Play();
+        gradedPhotos = true;
+
+        int composition = 0;
+        int framing = 0;
+        int effects = 0;
+        int smudges = 0;
+
+        foreach(Photograph p in photosToGrade)
+        {
+            composition += Mathf.FloorToInt(p.info.dataMaskRatio(DEERMASK) * 500);
+            framing += Mathf.Min(100, Mathf.FloorToInt(p.info.dataMaskRatio(EYEMASK) * 10000));
+            effects += Mathf.FloorToInt(p.info.dataMaskRatio(EFFECTMASK) * 50);
+            smudges -= Mathf.FloorToInt(p.info.damage * 20);
+        }
+
+        scoreText.text = "SCORE:\nComposition: " + composition + "\nFraming: " + framing +
+            "\nEffects: " + effects + "\nSmudges: " + smudges +
+            "\nTOTAL: " + (composition + framing + effects + smudges);
     }
 }

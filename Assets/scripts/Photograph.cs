@@ -16,7 +16,7 @@ public class Photograph : MonoBehaviour {
 	public void grow()
     {
         transform.localScale = normalScale * biggerScale;
-        Debug.Log(" redness " + info.detectColor(Color.red));
+        //Debug.Log(" redness " + info.detectColor(Color.red));
     }
 
     public void shrink()

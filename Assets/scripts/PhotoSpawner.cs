@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PhotoSpawner : MonoBehaviour
 {
@@ -11,8 +12,12 @@ public class PhotoSpawner : MonoBehaviour
 
     PhotoStorage photos;
 
+    public List<Photograph> photoList;
+
     public void Start()
     {
+        photoList = new List<Photograph>();
+
         photos = GameObject.FindObjectOfType<PhotoStorage>();
         photos.transferTextures();
 
@@ -30,7 +35,9 @@ public class PhotoSpawner : MonoBehaviour
                 count = 0;
                 layer++;
             }
-            p.GetComponent<Photograph>().info = photos.infos[i];
+            Photograph pho = p.GetComponent<Photograph>();
+            pho.info = photos.infos[i];
+            photoList.Add(pho);
         }
     }
 }

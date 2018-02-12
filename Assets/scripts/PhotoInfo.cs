@@ -18,6 +18,21 @@ public class PhotoInfo
         //pipeDetection = new PipeInfo[rays];
     }
 
+    //returns 0 to 1 for the presence of a given color in the data texture
+    public float dataMaskRatio(Color32 c)
+    {
+        float ratio = 0;
+        foreach(Color32 pixel in dataTexture.GetPixels32())
+        {
+            if(pixel.r == c.r && pixel.g == c.g && pixel.b == c.b)
+            {
+                ratio++;
+            }
+        }
+        ratio = ratio / (256 * 256);
+        return ratio;
+    }
+
     //returns 0 to 1 based on how much of the photo is close to that color
     //works best with bright, saturated colors
     //probably won't work well for very dark or very desaturated colors.
