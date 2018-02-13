@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class ClassMenu : MonoBehaviour
 {
@@ -71,7 +72,15 @@ public class ClassMenu : MonoBehaviour
         RaycastHit rayHit = new RaycastHit();
         if (Physics.Raycast(ray, out rayHit))
         {
-            Debug.DrawLine(rayHit.point, transform.position);
+            if (rayHit.transform.name == "Quit" && Input.GetButtonDown("Fire1"))
+            {
+                Application.Quit();
+            }
+            if (rayHit.transform.name == "Retry" && Input.GetButtonDown("Fire1"))
+            {
+                SceneManager.LoadScene("Dream");
+            }
+            //Debug.DrawLine(rayHit.point, transform.position);
             Photograph photo = rayHit.collider.gameObject.GetComponent<Photograph>();
             if (photo != null)
             {
@@ -186,7 +195,7 @@ public class ClassMenu : MonoBehaviour
         foreach(Photograph p in photosToGrade)
         {
             composition += Mathf.FloorToInt(p.info.dataMaskRatio(DEERMASK) * 500);
-            framing += Mathf.Min(100, Mathf.FloorToInt(p.info.dataMaskRatio(EYEMASK) * 10000));
+            framing += Mathf.Min(100, Mathf.FloorToInt(p.info.dataMaskRatio(EYEMASK) * 50000));
             effects += Mathf.FloorToInt(p.info.dataMaskRatio(EFFECTMASK) * 50);
             smudges -= Mathf.FloorToInt(p.info.damage * 20);
         }

@@ -19,8 +19,12 @@ public class StandingForce : MonoBehaviour {
     public float kD = .1f;
     public float iBound = 1;
 
+    public float friction = 1;
+
     float lastError = 0;
     float integral = 0;
+
+    bool standing = false;
 
     private void Awake()
     {
@@ -46,8 +50,10 @@ public class StandingForce : MonoBehaviour {
     {
         Ray ray = new Ray(transform.position + transform.TransformDirection(offset), transform.TransformDirection(direction));
         RaycastHit hit = new RaycastHit();
-        if (Physics.Raycast(ray, out hit, maxDist, mask))
+        standing = Physics.Raycast(ray, out hit, maxDist, mask);
+        if (standing)
         {
+            //upwards force
             float error = hit.distance - targetDist;
             float deriv = (error - lastError) / Time.fixedDeltaTime;
             integral += error * Time.fixedDeltaTime;
@@ -56,7 +62,22 @@ public class StandingForce : MonoBehaviour {
             float force = kP * error + kI * integral + kD * deriv;
             force = Mathf.Clamp(force, -1, 0);
             body.AddForce(-force * maxForce * Vector3.up);
+
+            //friction force
+            Vector3 hVel = new Vector3(body.velocity.x, 0, body.velocity.z);
+            if(hVel.magnitude <= Time.fixedDeltaTime * friction)
+            {
+                body.AddForce(-hVel, ForceMode.VelocityChange);
+            } else
+            {
+                body.AddForce(-hVel.normalized * friction);
+            }
         }
+    }
+
+    public bool isStanding()
+    {
+        return standing;
     }
 
     private void OnDrawGizmosSelected()
