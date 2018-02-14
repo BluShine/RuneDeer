@@ -17,7 +17,7 @@ public class DreamMenu : MonoBehaviour
 
     GlobalFog fog;
     float fogDefault;
-    bool fogTween = false;
+    bool fogTween = true;
     static float FOGSPEED = 5f;
 
     public Transform titleScreen;

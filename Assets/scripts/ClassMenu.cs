@@ -78,6 +78,8 @@ public class ClassMenu : MonoBehaviour
             }
             if (rayHit.transform.name == "Retry" && Input.GetButtonDown("Fire1"))
             {
+                Destroy(FindObjectOfType<PhotoStorage>().gameObject);
+                Destroy(FindObjectOfType<CursorLocker>().gameObject);
                 SceneManager.LoadScene("Dream");
             }
             //Debug.DrawLine(rayHit.point, transform.position);
@@ -195,8 +197,8 @@ public class ClassMenu : MonoBehaviour
         foreach(Photograph p in photosToGrade)
         {
             composition += Mathf.FloorToInt(p.info.dataMaskRatio(DEERMASK) * 500);
-            framing += Mathf.Min(100, Mathf.FloorToInt(p.info.dataMaskRatio(EYEMASK) * 50000));
-            effects += Mathf.FloorToInt(p.info.dataMaskRatio(EFFECTMASK) * 50);
+            framing += Mathf.Min(100, Mathf.FloorToInt(p.info.dataMaskRatio(EYEMASK) * 20000));
+            effects += Mathf.Min(100, Mathf.FloorToInt(p.info.dataMaskRatio(EFFECTMASK) * 500));
             smudges -= Mathf.FloorToInt(p.info.damage * 20);
         }
 
