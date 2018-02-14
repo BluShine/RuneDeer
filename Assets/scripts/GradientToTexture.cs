@@ -5,29 +5,14 @@ using System.IO;
 public class GradientToTexture : MonoBehaviour
 {
     public Gradient gradient;
-    public Material material;
-    bool lateStart = false;
-
     void Awake()
     {
-        saveTexture();
+
     }
 
     void Update()
     {
-        if(!lateStart)
-        {
-            lateStart = true;
-            saveTexture();
-        }
-    }
 
-    [BitStrap.Button]
-    void saveTexture()
-    {
-        if (material == null) return;
-
-        material.SetTexture("_ColorRamp", makeTexture());
     }
 
     [BitStrap.Button]

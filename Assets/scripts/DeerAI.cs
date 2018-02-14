@@ -8,7 +8,7 @@ public class DeerAI : MonoBehaviour {
     public Rigidbody body;
 
     DeerState state = DeerState.Stand;
-    float stateTimer = 5;
+    float stateTimer = 2;
 
     static float STANDMIN = 20;
     static float STANDMAX = 40;
@@ -65,6 +65,8 @@ public class DeerAI : MonoBehaviour {
                 {
                     state = DeerState.Stand;
                     stateTimer = Random.Range(STANDMIN, STANDMAX);
+                    activeParticleSys = Random.Range(0, particles.Length);
+                    particles[activeParticleSys].Play();
                 }
                 break;
         }
