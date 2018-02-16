@@ -10,9 +10,9 @@ public class DeerAI : MonoBehaviour {
     DeerState state = DeerState.Stand;
     float stateTimer = 2;
 
-    static float STANDMIN = 20;
-    static float STANDMAX = 40;
-    static float CROUCHMIN = 3;
+    static float STANDMIN = 15;
+    static float STANDMAX = 20;
+    static float CROUCHMIN = 2;
     static float CROUCHMAX = 5;
 
     float startHeight;
@@ -65,7 +65,12 @@ public class DeerAI : MonoBehaviour {
                 {
                     state = DeerState.Stand;
                     stateTimer = Random.Range(STANDMIN, STANDMAX);
+                    int lastPart = activeParticleSys;
                     activeParticleSys = Random.Range(0, particles.Length);
+                    if(lastPart == activeParticleSys)
+                    {
+                        activeParticleSys = (activeParticleSys + 1) % particles.Length;
+                    }
                     particles[activeParticleSys].Play();
                 }
                 break;

@@ -162,6 +162,11 @@ public class ScreenShotter : MonoBehaviour
         // save to HDD
         string timestamp = System.DateTime.Now.Month + "-" + System.DateTime.Now.Day + "_" + 
             System.DateTime.Now.Hour + "-" + System.DateTime.Now.Minute + "-" + System.DateTime.Now.Second;
+        if(!Directory.Exists(Application.dataPath + "/../screenshots"))
+        {
+            Directory.CreateDirectory(Application.dataPath + "/../screenshots");
+            yield return 0;
+        }
         File.WriteAllBytes(Application.dataPath + "/../screenshots/photo-" + timestamp + ".png", bytes);
 
 

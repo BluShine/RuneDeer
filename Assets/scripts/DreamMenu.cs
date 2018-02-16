@@ -26,6 +26,7 @@ public class DreamMenu : MonoBehaviour
     bool eyesClosing = false;
 
     public GameObject eyes;
+    public AudioSource music;
 
     public float filmCooldown = 5;
     float filmTimer = 0;
@@ -133,6 +134,7 @@ public class DreamMenu : MonoBehaviour
     {
         if (!eyesClosing)
         {
+            StartCoroutine(AudioFadeOut.FadeOut(music, 2f));
             eyesClosing = true;
             eyes.SetActive(true);
             eyes.GetComponent<Animator>().SetTrigger("close");

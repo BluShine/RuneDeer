@@ -41,6 +41,8 @@ public class ClassMenu : MonoBehaviour
     bool gradedPhotos = false;
     public ParticleSystem gradeParticles;
 
+    public AudioSource music;
+
     void Start()
     {
         instance = this;
@@ -79,7 +81,7 @@ public class ClassMenu : MonoBehaviour
             if (rayHit.transform.name == "Retry" && Input.GetButtonDown("Fire1"))
             {
                 Destroy(FindObjectOfType<PhotoStorage>().gameObject);
-                Destroy(FindObjectOfType<CursorLocker>().gameObject);
+                StartCoroutine(AudioFadeOut.FadeOut(music, 0.3f));
                 SceneManager.LoadScene("Dream");
             }
             //Debug.DrawLine(rayHit.point, transform.position);

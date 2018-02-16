@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: a7e09f2a3f3b01948b5f4b26546dba0a
+timeCreated: 1518697035
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 124
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Berkshire Swash
+  fontNames:
+  - Berkshire Swash
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
